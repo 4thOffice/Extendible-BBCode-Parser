@@ -524,7 +524,8 @@ var XBBCODE = (function () {
             },
             closeTag: function (params, content) {
                 return '</div>';
-            }
+            },
+            displayContent: false
         },
         /*
             The [*] tag is special since the user does not define a closing [/*] tag when writing their bbcode.
