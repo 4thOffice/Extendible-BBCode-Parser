@@ -217,7 +217,9 @@ var XBBCODE = (function() {
         "img": {
             openTag: function(params,content) {
 
-                var myUrl = content;
+                var myUrl = params.src;
+
+                console.log(params)
 
                 urlPattern.lastIndex = 0;
                 if ( !urlPattern.test( myUrl ) ) {
@@ -242,7 +244,7 @@ var XBBCODE = (function() {
         "large": {
             openTag: function(params,content) {
 				params = params || '';
-				
+
                 var colorCode = params.substr(1) || "inherit";
                 colorNamePattern.lastIndex = 0;
                 colorCodePattern.lastIndex = 0;
@@ -357,7 +359,7 @@ var XBBCODE = (function() {
         "small": {
             openTag: function(params,content) {
 				params = params || '';
-				
+
                 var colorCode = params.substr(1) || "inherit";
                 colorNamePattern.lastIndex = 0;
                 colorCodePattern.lastIndex = 0;
@@ -779,7 +781,7 @@ var XBBCODE = (function() {
 			ret.html = ret.html.replace("&#91;", "["); // put ['s back in
         	ret.html = ret.html.replace("&#93;", "]"); // put ['s back in
 		}
-		
+
         ret.error = errQueue.length !== 0;
         ret.errorQueue = errQueue;
 
