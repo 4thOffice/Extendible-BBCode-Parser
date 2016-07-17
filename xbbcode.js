@@ -225,16 +225,16 @@ var XBBCODE = (function () {
         "img": {
             openTag: function (params, content) {
 
-                var myUrl = params.src;
+                var imgId = params.replace('src="cid:', '').replace('"','').replace(' ','');
 
-                console.log(params)
+                var token = localStorage.getItem('access_token')
 
-                urlPattern.lastIndex = 0;
-                if (!urlPattern.test(myUrl)) {
-                    myUrl = "";
-                }
+                // /files/A1_81a376fadcb34327945b8a89ada7ac4b/download
+                // https://app.4thoffice.com/files/A1_c6ba6b88d31f4b2da10876e8f5fc3cbf/download
+                // https://beta.4thoffice.com/trunk/token/b8b74181-7d4f-fb66-58c5-5026d2fbde0a/files/A1_2a1217787c5e45e4b90f6451b3d1a267/pages/0
+                var imgUrl = 'https://beta.4thoffice.com/trunk/token/' + token + '/files/' + imgId + '/download'
 
-                return '<img src="' + myUrl + '" />';
+                return '<img src="' + imgUrl + '" />';
             },
             closeTag: function (params, content) {
                 return '';
