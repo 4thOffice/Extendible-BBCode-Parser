@@ -95,11 +95,11 @@ var XBBCODE = (function () {
     tags = {
         "time": {
             openTag: function(params,content) {
-                var date = new Date(content);
-                return '<span class="time">' + date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+                return '<span class="time" data-utc="'
             },
             closeTag: function(params,content) {
-                return '</span>';
+                var date = new Date(content);
+                return '">' + date.toLocaleDateString() + ' ' + date.toLocaleTimeString() + '</span>';
             }
         },        
         "br": {
