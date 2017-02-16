@@ -93,6 +93,15 @@ var XBBCODE = (function () {
      * --------------------------------------------------------------------------- */
 
     tags = {
+        "time": {
+            openTag: function(params,content) {
+                var date = new Date(content);
+                return '<span class="time">' + date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+            },
+            closeTag: function(params,content) {
+                return '</span>';
+            }
+        },        
         "br": {
             openTag: function (params, content) {
                 return '<br>' + content;
