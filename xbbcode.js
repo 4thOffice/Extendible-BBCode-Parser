@@ -233,13 +233,11 @@ var XBBCODE = (function () {
         },
         "img": {
             openTag: function (params, content) {
-                var imgId = params.replace('src="cid:', '').replace('"','').replace(' ','');
-                return '<img src="' + imgId + '" />';
+                return '<img src="';
             },
             closeTag: function (params, content) {
-                return '';
-            },
-            displayContent: false
+                return '" />';
+            }
         },
         "justify": {
             openTag: function (params, content) {
