@@ -101,7 +101,7 @@ var XBBCODE = (function () {
                 var date = new Date(content);
                 return '">' + date.toLocaleDateString() + ' ' + date.toLocaleTimeString() + '</span>';
             }
-        },        
+        },
         "br": {
             openTag: function (params, content) {
                 return '<br>' + content;
@@ -298,6 +298,15 @@ var XBBCODE = (function () {
             restrictChildrenTo: ["*", "li"]
         },
         "noparse": {
+            openTag: function (params, content) {
+                return '';
+            },
+            closeTag: function (params, content) {
+                return '';
+            },
+            noParse: true
+        },
+        "code": {
             openTag: function (params, content) {
                 return '';
             },
