@@ -233,11 +233,14 @@ var XBBCODE = (function () {
         },
         "img": {
             openTag: function (params, content) {
-                return '<img src="';
+                var imgId = params.replace('src=', '').replace(' ',''); 
+                return '<img src=' + imgId + ' />'; 
+            }, 
+            closeTag: function (params, content) { 
+                return ''; 
+
             },
-            closeTag: function (params, content) {
-                return '" />';
-            }
+            displayContent: false
         },
         "justify": {
             openTag: function (params, content) {
