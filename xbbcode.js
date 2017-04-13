@@ -507,7 +507,7 @@ var XBBCODE = (function () {
                 if (!params) {
                     myUrl = content.replace(/<.*?>/g, "");
                 } else {
-                    myUrl = params.substr(1);
+                    myUrl = params.match(/\"(.*?)\"/)[1];
                 }
 
                 urlPattern.lastIndex = 0;
