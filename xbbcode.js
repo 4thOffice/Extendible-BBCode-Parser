@@ -110,6 +110,14 @@ var XBBCODE = (function () {
                 return '';
             }
         },
+        "hr": {
+            openTag: function (params, content) {
+                return '<hr>' + content;
+            },
+            closeTag: function (params, content) {
+                return '';
+            }
+        },
         "b": {
             openTag: function (params, content) {
                 return '<span class="xbbcode-b">';
@@ -507,7 +515,10 @@ var XBBCODE = (function () {
                 if (!params) {
                     myUrl = content.replace(/<.*?>/g, "");
                 } else {
-                    myUrl = params.match(/\"(.*?)\"/)[1];
+                    let matchingString = params.match(/\"(.*?)\"/);
+                    if (matchingString && matchingString.length && matchingString.length > 1) {
+                        myUrl = matchingString[1];
+                    } 
                 }
 
                 urlPattern.lastIndex = 0;
