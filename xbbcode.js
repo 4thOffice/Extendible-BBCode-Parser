@@ -49,7 +49,8 @@ var XBBCODE = (function () {
         pbbRegExp,
         pbbRegExp2,
         openTags,
-        closeTags;
+        closeTags,
+        removeCollapseTags;
 
     /* -----------------------------------------------------------------------------
      * tags
@@ -534,7 +535,7 @@ var XBBCODE = (function () {
         },
         "collapse": {
             openTag: function (params, content) {
-                if (config.removeCollapseTags) {
+                if (removeCollapseTags) {
                     return '';
                     
                 } else {
@@ -543,7 +544,7 @@ var XBBCODE = (function () {
                 
             },
             closeTag: function (params, content) {
-                if (config.removeCollapseTags) {
+                if (removeCollapseTags) {
                     return '';
                 } else {
                     return '</div>';
@@ -554,14 +555,14 @@ var XBBCODE = (function () {
         },
         "collapse2": {
             openTag: function (params, content) {
-                if (config.removeCollapseTags) {
+                if (removeCollapseTags) {
                     return '';
                 } else {
                     return '<div class="collapse-button"><span class="more-button">...</span>' + '<div class="more-content">'+ content +'</div>';
                 }
             },
             closeTag: function (params, content) {
-                if (config.removeCollapseTags) {
+                if (removeCollapseTags) {
                     return ''; 
                 } else {
                     return '</div>';
@@ -733,6 +734,7 @@ var XBBCODE = (function () {
 
     function parse(config) {
         var output = config.text;
+        removeCollapseTags = config.removeCollapseTags;
         output = output.replace(bbRegExp, replaceFunct);
         return output;
     }
