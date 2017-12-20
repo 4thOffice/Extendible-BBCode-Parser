@@ -535,17 +535,19 @@ var XBBCODE = (function () {
         "collapse": {
             openTag: function (params, content) {
                 if (config.removeCollapseTags) {
-                    return '<div class="collapse-button"><span class="more-button">...</span>' + '<div class="more-content">'+ content +'</div>';
-                } else {
                     return '';
+                    
+                } else {
+                    return '<div class="collapse-button"><span class="more-button">...</span>' + '<div class="more-content">'+ content +'</div>';
                 }
                 
             },
             closeTag: function (params, content) {
                 if (config.removeCollapseTags) {
-                    return '</div>';
-                } else {
                     return '';
+                } else {
+                    return '</div>';
+                    
                 }
             },
             displayContent: false
@@ -553,16 +555,16 @@ var XBBCODE = (function () {
         "collapse2": {
             openTag: function (params, content) {
                 if (config.removeCollapseTags) {
-                    return '<div class="collapse-button"><span class="more-button">...</span>' + '<div class="more-content">'+ content +'</div>';
-                } else {
                     return '';
+                } else {
+                    return '<div class="collapse-button"><span class="more-button">...</span>' + '<div class="more-content">'+ content +'</div>';
                 }
             },
             closeTag: function (params, content) {
                 if (config.removeCollapseTags) {
-                    return '</div>';
+                    return ''; 
                 } else {
-                    return '';
+                    return '</div>';
                 }
             },
             displayContent: false
