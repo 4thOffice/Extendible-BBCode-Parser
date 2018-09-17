@@ -160,7 +160,7 @@ var XBBCODE = (function () {
         "color": {
             openTag: function (params, content) {
 
-                var colorCode = (params.substr(1)).toLowerCase() || "black";
+                var colorCode = (params.replace(/['"]+/g, '').substr(1)).toLowerCase() || "black";
                 colorNamePattern.lastIndex = 0;
                 colorCodePattern.lastIndex = 0;
                 if (!colorNamePattern.test(colorCode)) {
