@@ -37,7 +37,6 @@ var XBBCODE = (function () {
     // -----------------------------------------------------------------------------
 
     var me = {},
-        urlPattern = /^(?:https?|file|c|intheloop):(?:\/{1,3}|\\{1})[-a-zA-Z0-9:;@#%&()~_?\+=\/\\\.]*$/,
         colorNamePattern = /^(?:aliceblue|antiquewhite|aqua|aquamarine|azure|beige|bisque|black|blanchedalmond|blue|blueviolet|brown|burlywood|cadetblue|chartreuse|chocolate|coral|cornflowerblue|cornsilk|crimson|cyan|darkblue|darkcyan|darkgoldenrod|darkgray|darkgreen|darkkhaki|darkmagenta|darkolivegreen|darkorange|darkorchid|darkred|darksalmon|darkseagreen|darkslateblue|darkslategray|darkturquoise|darkviolet|deeppink|deepskyblue|dimgray|dodgerblue|firebrick|floralwhite|forestgreen|fuchsia|gainsboro|ghostwhite|gold|goldenrod|gray|green|greenyellow|honeydew|hotpink|indianred|indigo|ivory|khaki|lavender|lavenderblush|lawngreen|lemonchiffon|lightblue|lightcoral|lightcyan|lightgoldenrodyellow|lightgray|lightgreen|lightpink|lightsalmon|lightseagreen|lightskyblue|lightslategray|lightsteelblue|lightyellow|lime|limegreen|linen|magenta|maroon|mediumaquamarine|mediumblue|mediumorchid|mediumpurple|mediumseagreen|mediumslateblue|mediumspringgreen|mediumturquoise|mediumvioletred|midnightblue|mintcream|mistyrose|moccasin|navajowhite|navy|oldlace|olive|olivedrab|orange|orangered|orchid|palegoldenrod|palegreen|paleturquoise|palevioletred|papayawhip|peachpuff|peru|pink|plum|powderblue|purple|red|rosybrown|royalblue|saddlebrown|salmon|sandybrown|seagreen|seashell|sienna|silver|skyblue|slateblue|slategray|snow|springgreen|steelblue|tan|teal|thistle|tomato|turquoise|violet|wheat|white|whitesmoke|yellow|yellowgreen)$/,
         colorCodePattern = /^#?[a-fA-F0-9]{6}$/,
         emailPattern = /[^\s@]+@[^\s@]+\.[^\s@]+/,
@@ -50,7 +49,7 @@ var XBBCODE = (function () {
         pbbRegExp2,
         openTags,
         closeTags,
-        removeCollapseTags;
+        removeTags;
 
     /* -----------------------------------------------------------------------------
      * tags
@@ -94,31 +93,6 @@ var XBBCODE = (function () {
      * --------------------------------------------------------------------------- */
 
     tags = {
-        "time": {
-            openTag: function(params,content) {
-                return '<span class="time" data-utc="'
-            },
-            closeTag: function(params,content) {
-                var date = new Date(content);
-                return '">' + date.toLocaleDateString() + ' ' + date.toLocaleTimeString() + '</span>';
-            }
-        },
-        "br": {
-            openTag: function (params, content) {
-                return '<br>' + content;
-            },
-            closeTag: function (params, content) {
-                return '';
-            }
-        },
-        "hr": {
-            openTag: function (params, content) {
-                return '<hr>' + content;
-            },
-            closeTag: function (params, content) {
-                return '';
-            }
-        },
         "b": {
             openTag: function (params, content) {
                 return '<span class="xbbcode-b">';
@@ -240,17 +214,6 @@ var XBBCODE = (function () {
                 return '</span>';
             }
         },
-        "img": {
-            openTag: function (params, content) {
-                var imgId = params.replace('src=', '').replace(' ',''); 
-                return '<img src=' + imgId + ' />'; 
-            }, 
-            closeTag: function (params, content) { 
-                return ''; 
-
-            },
-            displayContent: false
-        },
         "justify": {
             openTag: function (params, content) {
                 return '<span class="xbbcode-justify">';
@@ -310,15 +273,6 @@ var XBBCODE = (function () {
             restrictChildrenTo: ["*", "li"]
         },
         "noparse": {
-            openTag: function (params, content) {
-                return '';
-            },
-            closeTag: function (params, content) {
-                return '';
-            },
-            noParse: true
-        },
-        "code": {
             openTag: function (params, content) {
                 return '';
             },
@@ -508,68 +462,6 @@ var XBBCODE = (function () {
             },
             restrictChildrenTo: ["*", "li"]
         },
-        "url": {
-            openTag: function (params, content) {
-
-                var myUrl;
-
-                if (!params) {
-                    myUrl = content.replace(/<.*?>/g, "");
-                } else {
-                    var matchingString = params.match(/\"(.*?)\"/);
-                    if (matchingString && matchingString.length && matchingString.length > 1) {
-                        myUrl = matchingString[1];
-                    } 
-                }
-
-                urlPattern.lastIndex = 0;
-                if (!urlPattern.test(myUrl)) {
-                    myUrl = "https://" + myUrl;
-                }
-
-                return '<a href="' + myUrl + '">';
-            },
-            closeTag: function (params, content) {
-                return '</a>';
-            }
-        },
-        "collapse": {
-            openTag: function (params, content) {
-                if (removeCollapseTags) {
-                    return '';
-                    
-                } else {
-                    return '<div class="collapse-button"><span class="more-button">...</span>' + '<div class="more-content">'+ content +'</div>';
-                }
-                
-            },
-            closeTag: function (params, content) {
-                if (removeCollapseTags) {
-                    return '';
-                } else {
-                    return '</div>';
-                    
-                }
-            },
-            displayContent: false
-        },
-        "collapse2": {
-            openTag: function (params, content) {
-                if (removeCollapseTags) {
-                    return '';
-                } else {
-                    return '<div class="collapse-button"><span class="more-button">...</span>' + '<div class="more-content">'+ content +'</div>';
-                }
-            },
-            closeTag: function (params, content) {
-                if (removeCollapseTags) {
-                    return ''; 
-                } else {
-                    return '</div>';
-                }
-            },
-            displayContent: false
-        },
         /*
             The [*] tag is special since the user does not define a closing [/*] tag when writing their bbcode.
             Instead this module parses the code and adds the closing [/*] tag in for them. None of the tags you
@@ -722,8 +614,9 @@ var XBBCODE = (function () {
         tagName = tagName.toLowerCase();
 
         var processedContent = tags[tagName].noParse ? unprocess(tagContents) : tagContents.replace(bbRegExp, replaceFunct),
-            openTag = tags[tagName].openTag(tagParams, processedContent),
-            closeTag = tags[tagName].closeTag(tagParams, processedContent);
+         tag = tags[tagName],
+         openTag = removeTags && tag.removeTags ? '' : tag.openTag(tagParams, processedContent),
+         closeTag = removeTags && tag.removeTags ? '' : tag.closeTag(tagParams, processedContent);
 
         if (tags[tagName].displayContent === false) {
             processedContent = "";
@@ -734,7 +627,7 @@ var XBBCODE = (function () {
 
     function parse(config) {
         var output = config.text;
-        removeCollapseTags = config.removeCollapseTags;
+        removeTags = config.removeTags;
         output = output.replace(bbRegExp, replaceFunct);
         return output;
     }
